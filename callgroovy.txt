@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: BuildConfig
+metadata:
+  creationTimestamp: null
+  name: just-to-say-hi-sample-pipeline
+spec:
+  nodeSelector: {}
+  output: {}
+  postCommit: {}
+  resources: {}
+  runPolicy: Serial
+  source:
+    type: None
+  strategy:
+    jenkinsPipelineStrategy:
+      jenkinsfile: "// path of the template to use\ndef templatePath = 'https://raw.githubusercontent.com/openshift/nodejs-ex/master/openshift/templates/nodejs-mongodb.json'\n//
+        name of the template that will be created\ndef templateName = 'nodejs-mongodb-example'\n//
+        NOTE, the \"pipeline\" directive/closure from the declarative pipeline syntax
+        needs to include, or be nested outside,\n// and \"openshift\" directive/closure
+        from the OpenShift Client Plugin for Jenkins.  Otherwise, the declarative
+        pipeline engine\n// will not be fully engaged.\npipeline {\n    agent any\n
+        \   stages {\n        stage('preamble') {\n            steps {\n                script
+        {\n                    openshift.withCluster() {\n                        openshift.withProject()
+        {\n                            echo \"Using project: ${openshift.project()}\"\n
+        \                       }\n                    }\n                }\n            }\n
+        \       }\n        stage('build') {\n            steps {\n                script
+        {\n                    def verifyCall = load(\"/var/lib/jenkins/jobs/fisdemo/script.groovy\")\n
+        \                   timeout(time: 50, unit: \"SECONDS\") {\n                        verifyCall(\"how
+        to call openshift in groovy library?\")\n                    }\n                }\n\n
+        \               sh 'echo \"hello to the OpenSShift in Jenkins\"'\n            }\n
+        \       }\n        stage('test') {\n            steps {\n\n                sh
+        '''echo \"Hello from  testing stages.....\"\n                    ls -lah\n
+        \               \n                '''\n            }\n        }\n    }\n}
+        // pipeline"
+    type: JenkinsPipeline
+  triggers: []
+status:
+  lastVersion: 0
