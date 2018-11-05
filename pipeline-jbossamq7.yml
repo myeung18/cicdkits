@@ -26,10 +26,6 @@ spec:
                                     echo "Using project: ${openshift.project()}"
                                     echo "=============Creating Environment============================================"
                                     
-                                    echo "Using this template ${params.TEMPLATEPATH} with object"
-                                    println  templateName 
-                                    println  imageName 
-                                    
                                     osUtil.buildAmq7("")
                                 }
                             } 
@@ -40,7 +36,6 @@ spec:
                     steps {
                         echo "===============Test================================================"
                         sh '''echo "Hello from testing stages :TBD....."
-                            ls -lah
                         '''
                     }
                 }
